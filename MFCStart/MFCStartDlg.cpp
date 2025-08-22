@@ -8,8 +8,12 @@
 #include "MFCStartDlg.h"
 #include "afxdialogex.h"
 
+
+
+// 아래 세 줄을 통해서 콘솔창에 디버깅을 출력할 수 있음
 #ifdef _DEBUG
 #define new DEBUG_NEW
+#pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
 #endif
 
 
@@ -52,7 +56,8 @@ END_MESSAGE_MAP()
 
 CMFCStartDlg::CMFCStartDlg(CWnd* pParent /*=nullptr*/)
 	: CDialogEx(IDD_MFCSTART_DIALOG, pParent)
-	, m_nNum(100)
+	, m_nNum(0)
+	, m_nNum2(0)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
@@ -66,6 +71,10 @@ void CMFCStartDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_EDIT_AGE, m_age);
 	DDV_MinMaxInt(pDX, m_age, 0, 120); // 검증은 DDX 뒤에
 	DDX_Text(pDX, IDC_EDIT_NUM, m_nNum);
+	DDX_Text(pDX, IDC_EDIT_NUM2, m_nNum2);
+
+	// CString 멤버 변수 선언한 다음에 바인딩 해주기
+	DDX_Text(pDX, IDC_STATIC_RESULT, m_result);
 }
 
 BEGIN_MESSAGE_MAP(CMFCStartDlg, CDialogEx)
@@ -111,6 +120,7 @@ BOOL CMFCStartDlg::OnInitDialog()
 
 	
 	// 초기화 작업
+	SetDlgItemText(IDC_STATIC_RESULT, _T("0"));
 
 	m_name = _T("홍길동");
 	m_age = 20;
@@ -168,23 +178,35 @@ HCURSOR CMFCStartDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
+#include "iostream"
+using namespace std;
 
 void CMFCStartDlg::OnBnClickedBtnTest()
 {
-	UpdateData(TRUE);
+
 	// 프로그램에서 = 은 변수에다가 값을 넣겠다는 말이 된다.
 	//int nTest = 85;
 	//m_nNum = 99; 		
 	//m_nNum = nTest;
-	
-	int nSum = 0;
-	for (int i = 0; i < m_nNum; i++) {
-		nSum += i;
-	}
-	m_nNum = nSum;
+
+	UpdateData(TRUE);
+	int result = m_nNum + m_nNum2;
+
+	//int nSum = 0;
+	//// 이거 C++ 에서 편하게 쓰는 또 다른 for문 있었는데
+	//for (int i = 0; i < m_nNum; i++) {
+	//	nSum += i;
+	//	cout << "값: " << i << endl;
+	//}
+	//m_nNum = nSum;
+	//SetDlgItemText(IDC_STATIC_RESULT, _T(result));
+	 
+	m_result.Format(_T("%d"), result); // int → Cstring
 
 	// 위에처럼만 하고 실행시켜보면 m_nNum의 값이 바뀌지 않는다 항상 UpdataData를 해줘야 한다.
 	UpdateData(false);
+
+
 }
 
 void CMFCStartDlg::OnBnClickedBtnOk() {

@@ -1,2 +1,2 @@
-﻿  MFCStartDlg.cpp
+﻿MFCStartDlg.obj : warning LNK4258: '/entry:WinMainCRTStartup' 지시문은 '/ENTRY:wWinMainCRTStartup' 스위치와 호환되지 않습니다. 무시됩니다.
   MFCStart.vcxproj -> C:\Users\yhr\Desktop\Project\MFC\MFCStart\x64\Debug\MFCStart.exe
