@@ -52,6 +52,7 @@ END_MESSAGE_MAP()
 
 CMFCStartDlg::CMFCStartDlg(CWnd* pParent /*=nullptr*/)
 	: CDialogEx(IDD_MFCSTART_DIALOG, pParent)
+	, m_nNum(100)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
@@ -64,6 +65,7 @@ void CMFCStartDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_EDIT_NAME, m_name);
 	DDX_Text(pDX, IDC_EDIT_AGE, m_age);
 	DDV_MinMaxInt(pDX, m_age, 0, 120); // 검증은 DDX 뒤에
+	DDX_Text(pDX, IDC_EDIT_NUM, m_nNum);
 }
 
 BEGIN_MESSAGE_MAP(CMFCStartDlg, CDialogEx)
@@ -80,8 +82,6 @@ END_MESSAGE_MAP()
 BOOL CMFCStartDlg::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
-
-
 
 
 	// 시스템 메뉴에 "정보..." 메뉴 항목을 추가합니다.
@@ -109,7 +109,8 @@ BOOL CMFCStartDlg::OnInitDialog()
 	SetIcon(m_hIcon, TRUE);			// 큰 아이콘을 설정합니다.
 	SetIcon(m_hIcon, FALSE);		// 작은 아이콘을 설정합니다.
 
-	// TODO: 여기에 추가 초기화 작업을 추가합니다.
+	
+	// 초기화 작업
 
 	m_name = _T("홍길동");
 	m_age = 20;
@@ -170,7 +171,20 @@ HCURSOR CMFCStartDlg::OnQueryDragIcon()
 
 void CMFCStartDlg::OnBnClickedBtnTest()
 {
-	AfxMessageBox(_T("Hello World"));
+	UpdateData(TRUE);
+	// 프로그램에서 = 은 변수에다가 값을 넣겠다는 말이 된다.
+	//int nTest = 85;
+	//m_nNum = 99; 		
+	//m_nNum = nTest;
+	
+	int nSum = 0;
+	for (int i = 0; i < m_nNum; i++) {
+		nSum += i;
+	}
+	m_nNum = nSum;
+
+	// 위에처럼만 하고 실행시켜보면 m_nNum의 값이 바뀌지 않는다 항상 UpdataData를 해줘야 한다.
+	UpdateData(false);
 }
 
 void CMFCStartDlg::OnBnClickedBtnOk() {
@@ -189,5 +203,4 @@ void CMFCStartDlg::OnBnClickedBtnOk() {
 	// 성공적으로 읽었으면 UI에 다시 친절 메시지 넣기
 	m_name.Format(_T("%s (확인됨)"), m_name);
 	UpdateData(FALSE); // 변수 → UI 
-	
 }

@@ -28,8 +28,6 @@ protected:
 	CString m_name; // 이름 바인딩용
 	int m_age;      // 나이 바인딩용
 
-	afx_msg void OnBnClickedBtnOk();
-
 	// 생성된 메시지 맵 함수
 	virtual BOOL OnInitDialog();
 	afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
@@ -38,4 +36,6 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg void OnBnClickedBtnTest();
+	afx_msg void OnBnClickedBtnOk();
+	int m_nNum;
 };
