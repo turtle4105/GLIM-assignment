@@ -11,7 +11,7 @@ class CmfcCImageDlg : public CDialogEx
 
 private:
 	CImage m_image;
-
+	BOOL validImagePos(int x, int y);
 
 public:
 	CmfcCImageDlg(CWnd* pParent = nullptr);	// 표준 생성자입니다.
@@ -38,4 +38,9 @@ protected:
 public:
 	afx_msg void OnBnClickedBtnImage();
 	afx_msg void OnBnClickedOk();
+	afx_msg void OnBnClickedBtnSave();
+	afx_msg void OnBnClickedBtnLoad();
+	void UpdateDisplay();
+	void moveRect();
+	afx_msg void OnBnClickedBtnAction();
 };

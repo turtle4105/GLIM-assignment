@@ -1,19 +1,18 @@
 ﻿
 // mfcCImageDlg.cpp: 구현 파일
-//
 
 #include "pch.h"
 #include "framework.h"
 #include "mfcCImage.h"
 #include "mfcCImageDlg.h"
 #include "afxdialogex.h"
-// 추가 ! 
+
+// 추가 !!
 #include <atlimage.h>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
-
 
 // 응용 프로그램 정보에 사용되는 CAboutDlg 대화 상자입니다.
 
@@ -66,6 +65,9 @@ BEGIN_MESSAGE_MAP(CmfcCImageDlg, CDialogEx)
 	ON_WM_QUERYDRAGICON()
 	ON_BN_CLICKED(IDC_BTN_IMAGE, &CmfcCImageDlg::OnBnClickedBtnImage)
 	ON_BN_CLICKED(IDOK, &CmfcCImageDlg::OnBnClickedOk)
+	ON_BN_CLICKED(IDC_BTN_SAVE, &CmfcCImageDlg::OnBnClickedBtnSave)
+	ON_BN_CLICKED(IDC_BTN_LOAD, &CmfcCImageDlg::OnBnClickedBtnLoad)
+	ON_BN_CLICKED(IDC_BTN_ACTION, &CmfcCImageDlg::OnBnClickedBtnAction)
 END_MESSAGE_MAP()
 
 
@@ -154,15 +156,15 @@ HCURSOR CmfcCImageDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
-
 void CmfcCImageDlg::OnBnClickedBtnImage()
 {
-	int nWidth = 32;
-	int nHeight = 24;
+	int nWidth = 320;
+	int nHeight = 240;
 	// 8비트
 	int nBpp = 8;
 
-	m_image.Create(nWidth, nHeight, nBpp);
+	// Height 앞에 -를 붙이면 흰색이 된다 (?)
+	m_image.Create(nWidth, -nHeight, nBpp);
 	if (nBpp == 8) {
 		// 기본이 컬러 / 흑백에 대해서는 설정을 해야 함
 		static RGBQUAD rgb[256];
@@ -176,15 +178,19 @@ void CmfcCImageDlg::OnBnClickedBtnImage()
 	// 이미지의 포인터란?
 	unsigned char* fm = (unsigned char*)m_image.GetBits();
 
+	// memset() 0 == Black / 255 == White 
+	memset(fm, 0xff, nWidth * nHeight);
+
+
 	// 픽셀의 색을 진하게 표현할 수 있는 코드 부분
 	// 픽셀이란 게 무엇인지?
-	for (int j = 0; j < nHeight; j++) {
-		for (int i = 0; i < nWidth; i++) {
-			// 255 == White, 256 == Black
-			//fm[j * nPitch + i] = 255;
-			fm[j * nPitch + i] = (j * 10) % 255;
-		}
-	}
+	//for (int j = 0; j < nHeight; j++) {
+	//	for (int i = 0; i < nWidth; i++) {
+	//		// 255 == White, 256 == Black
+	//		//fm[j * nPitch + i] = 255;
+	//		fm[j * nPitch + i] = (j % 0xff);
+	//	}
+	//}
 
 	// 검은 점이 하나 생길 것임
 	//fm[12 * nPitch + 16] = 0;
@@ -193,22 +199,91 @@ void CmfcCImageDlg::OnBnClickedBtnImage()
 	//fm[1 * nPitch + 0] = 128;
 
 	// 절반을 바꾸기
-	for (int j = 0; j < nHeight/2; j++) {
-		for (int i = 0; i < nWidth/2; i++) {
-			// 255 == White, 256 == Black
-			//fm[j * nPitch + i] = 255;
-			fm[j * nPitch + i] = 200;
-		}
-	}
+	//for (int j = 0; j < nHeight/2; j++) {
+	//	for (int i = 0; i < nWidth/2; i++) {
+	//		// 255 == White, 256 == Black
+	//		//fm[j * nPitch + i] = 255;
+	//		fm[j * nPitch + i] = 200;
+	//	}
+	//}
 
 	CClientDC dc(this);
 	m_image.Draw(dc, 0, 0);
 
-	m_image.Save(_T("c:\\image\\save.bmp"));
 }
 
-void CmfcCImageDlg::OnBnClickedOk()
+CString g_strFileImage = (_T("c:\\image\\save.bmp"));
+void CmfcCImageDlg::OnBnClickedBtnSave()
 {
-	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	m_image.Save(g_strFileImage);
+}
+
+void CmfcCImageDlg::OnBnClickedBtnLoad() {
+	// 로드를 하기 위해서는 C 드라이브에 있는 걸 정리를 우선 해야 한다.
+	if (m_image != NULL) {
+		m_image.Destroy();
+	}
+	m_image.Load(g_strFileImage);
+
+	UpdateDisplay();
+}
+
+void CmfcCImageDlg::UpdateDisplay() {
+	// 화면에 뿌려준다!
+	CClientDC dc(this);
+	m_image.Draw(dc, 0, 0);
+}
+
+void CmfcCImageDlg::moveRect() {
+
+	static int nSttX = 0;
+	static int nSttY = 0;
+
+	int nGray = 80;
+	int nWidth = m_image.GetWidth();
+	int nHeight = m_image.GetHeight();
+	int nPitch = m_image.GetPitch();
+	unsigned char* fm = (unsigned char*)m_image.GetBits();
+
+	// memset() 0 == Black / 255 == White 
+	// Clear == memset
+	// 메모리 관리를 잘 해야 한다
+	memset(fm, 0xff, nWidth * nHeight);
+
+	for (int j = nSttY; j < nSttY+48; j++) {
+		for (int i = nSttX; i < nSttX+64; i++) {
+
+			if (validImagePos(i, j)) fm[j * nPitch + i] = nGray;
+		}
+	}
+
+	nSttX++;
+	nSttY++;
+	UpdateDisplay();
+}
+
+
+void CmfcCImageDlg::OnBnClickedBtnAction()
+{
+	for (int i = 0; i < 100; i++) {
+		moveRect();
+		Sleep(10);
+	}
+}
+
+BOOL CmfcCImageDlg::validImagePos(int x, int y) {
+	// 변수 초기화가 중요하다
+	// 한 번 변수를 만들게 되면 두 번, 세 번 쓰게끔 만드는 것!
+	int nWidth = m_image.GetWidth();
+	int nHeight = m_image.GetHeight();
+
+	// 이렇게 하면 영역 밖으로 벗어나도 프로그램이 죽지 않음
+	CRect rect(0, 0, nWidth, nHeight);
+	return rect.PtInRect(CPoint(x, y));
+}
+ 
+
+void CmfcCImageDlg::OnBnClickedOk() {
+
 	CDialogEx::OnOK();
 }
