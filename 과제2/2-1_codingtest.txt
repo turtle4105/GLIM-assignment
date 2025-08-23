@@ -1,0 +1,21 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+const int LAMB_PRICE = 12000;
+const int DRINK_PRICE = 2000;
+
+int solution(int n, int k) {
+    int service = n / 10;
+    int pay_drink;
+    
+    if (k > service) {
+        pay_drink = k - service;
+    } else {
+        pay_drink = 0;
+    }
+    
+    int total = LAMB_PRICE * n + (DRINK_PRICE * pay_drink);
+    return total;
+}

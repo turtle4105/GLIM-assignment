@@ -1,0 +1,28 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+const int REPEAT_TIMES = 2;
+
+vector<int> solution(vector<int> arr, vector<bool> flag) {
+    vector<int> sequence;
+    int numSteps = arr.size();
+    
+    for (int i = 0; i < numSteps; i++) {
+        int value = arr[i];
+        
+        if (flag[i]) {
+            int appendCount = value * REPEAT_TIMES;
+            for (int j = 0; j < appendCount; j ++) {
+                sequence.push_back(value);
+            }
+        } else {
+            int removeCount = value;
+            for (int j = 0; j < removeCount; j++) {
+                sequence.pop_back();
+            }
+        }
+    }
+    return sequence;
+}
