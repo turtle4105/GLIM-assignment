@@ -8,14 +8,9 @@ const int DRINK_PRICE = 2000;
 
 int solution(int n, int k) {
     int service = n / 10;
-    int pay_drink;
+    int payDrink = 0;
     
-    if (k > service) {
-        pay_drink = k - service;
-    } else {
-        pay_drink = 0;
-    }
+    if (k > service) payDrink = k - service;
     
-    int total = LAMB_PRICE * n + (DRINK_PRICE * pay_drink);
-    return total;
+    return LAMB_PRICE * n + (DRINK_PRICE * payDrink);
 }
