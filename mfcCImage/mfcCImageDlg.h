@@ -43,4 +43,6 @@ public:
 	void UpdateDisplay();
 	void moveRect();
 	afx_msg void OnBnClickedBtnAction();
+	void drawCircle(unsigned char* fm, int x, int y, int nRadius, int nGray);
+	BOOL isInCircle(int i, int j, int nCenterX, int nCenterY, int nRadius);
 };

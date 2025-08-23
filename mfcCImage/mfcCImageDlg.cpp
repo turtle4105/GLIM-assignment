@@ -158,8 +158,8 @@ HCURSOR CmfcCImageDlg::OnQueryDragIcon()
 
 void CmfcCImageDlg::OnBnClickedBtnImage()
 {
-	int nWidth = 320;
-	int nHeight = 240;
+	int nWidth = 640;
+	int nHeight = 480;
 	// 8비트
 	int nBpp = 8;
 
@@ -243,29 +243,37 @@ void CmfcCImageDlg::moveRect() {
 	int nWidth = m_image.GetWidth();
 	int nHeight = m_image.GetHeight();
 	int nPitch = m_image.GetPitch();
+	int nRadius = 20;
 	unsigned char* fm = (unsigned char*)m_image.GetBits();
 
 	// memset() 0 == Black / 255 == White 
 	// Clear == memset
 	// 메모리 관리를 잘 해야 한다
+	// 이미지를 Clear 하는 것!
 	memset(fm, 0xff, nWidth * nHeight);
+	
+	// 원을 그리자!
+	// 그림이 그려질 전체 영역, x, y, 반지름, 색
+	//drawCircle(fm, nSttX, nSttY, nRadius, 0xff);
 
-	for (int j = nSttY; j < nSttY+48; j++) {
-		for (int i = nSttX; i < nSttX+64; i++) {
+	drawCircle(fm, nSttX++, nSttY++, nRadius, nGray);
 
-			if (validImagePos(i, j)) fm[j * nPitch + i] = nGray;
-		}
-	}
+	// 영역 안에 들어가면 그려라!
+	//for (int j = nSttY; j < nSttY+48; j++) {
+		//for (int i = nSttX; i < nSttX+64; i++) {
+			//if (validImagePos(i, j)) fm[j * nPitch + i] = nGray;
+		//}
+	//}
 
-	nSttX++;
-	nSttY++;
+	//nSttX++;
+	//nSttY++;
 	UpdateDisplay();
 }
 
 
 void CmfcCImageDlg::OnBnClickedBtnAction()
 {
-	for (int i = 0; i < 100; i++) {
+	for (int i = 0; i < 400; i++) {
 		moveRect();
 		Sleep(10);
 	}
@@ -282,6 +290,33 @@ BOOL CmfcCImageDlg::validImagePos(int x, int y) {
 	return rect.PtInRect(CPoint(x, y));
 }
  
+void CmfcCImageDlg::drawCircle(unsigned char* fm, int x, int y, int nRadius, int nGray) {
+	int nCenterX = x + nRadius;
+	int nCenterY = y + nRadius;
+	int nPitch = m_image.GetPitch();
+
+	for (int j = y; j < y + nRadius * 2; j++) {
+		for (int i = x; i < x + nRadius * 2; i++) {
+			if (isInCircle(i, j, nCenterX, nCenterY, nRadius))
+				fm[j * nPitch + i] = nGray;
+		}
+	}
+}
+
+BOOL CmfcCImageDlg::isInCircle(int i, int j, int nCenterX, int nCenterY, int nRadius) {
+	bool bRet = false;
+
+	// X간의 거리
+	double dX = i - nCenterX;
+	double dY = j - nCenterY;
+	double dDist = dX * dX + dY * dY;
+
+	if (dDist < nRadius * nRadius) {
+		bRet = true;
+	}
+
+	return bRet;
+}
 
 void CmfcCImageDlg::OnBnClickedOk() {
 
