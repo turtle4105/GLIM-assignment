@@ -16,5 +16,5 @@ struct AppState {
     int markerR{ 10 };
     int thickness{ 2 };
     RECT canvas{ 0,0,0,0 };
-    int bufW{ 800 }, bufH{ 600 }, bufBpp{ 8 };
+    int bufW{ 630 }, bufH{ 500 }, bufBpp{ 8 };
 };

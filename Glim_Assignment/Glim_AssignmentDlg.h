@@ -35,6 +35,9 @@ protected:
 	afx_msg HCURSOR OnQueryDragIcon();
 
 	// 추가
+	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
+	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
+	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 	afx_msg LRESULT OnAppAutoTick(WPARAM, LPARAM);
 
 	DECLARE_MESSAGE_MAP()
@@ -50,10 +53,13 @@ private:
 	void Present();
 	void RenderToBackBuffer();
 
+	bool HitTestMarker(const Pt& p, const CPoint& m, int r);
+	void RecomputeCircle();
 
+	afx_msg void OnBnClickedInit();
+	afx_msg void OnBnClickedRandom();
+
+	void ReadInputs();           // Edit에서 반지름/두께 읽기(검증 포함)
+	void UpdateCenterText();     // 중심 좌표 Static 갱신
 
 };
-
-
-
-
