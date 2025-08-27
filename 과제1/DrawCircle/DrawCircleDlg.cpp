@@ -275,23 +275,17 @@ UINT AFX_CDECL CDrawCircleDlg::RandThreadProc(LPVOID p)
     const int W = dlg->m_image.GetWidth();
     const int H = dlg->m_image.GetHeight();
 
-    if (dlg->m_count < 3) {
-        while (dlg->m_count < 3) {
-            dlg->m_pts[dlg->m_count] = { std::rand() % W, std::rand() % H };
-            ++dlg->m_count;
-        }
-        dlg->PostMessage(WM_RANDOM_TICK);
-        ::Sleep(10);
-    }
-
+    
     for (int k = 0; k < 10 && dlg->m_randRunning; ++k) {
-        for (int i = 0;i < 3;++i) {
+        for (int i = 0; i < 3; ++i) {
             dlg->m_pts[i].x = std::rand() % W;
             dlg->m_pts[i].y = std::rand() % H;
         }
         dlg->PostMessage(WM_RANDOM_TICK);
-        ::Sleep(500);
+
+        Sleep(500);
     }
+
     dlg->m_randRunning = false;
     return 0;
 }
@@ -299,6 +293,11 @@ UINT AFX_CDECL CDrawCircleDlg::RandThreadProc(LPVOID p)
 
 void CDrawCircleDlg::OnBnClickedBtnRandom()
 {
+    if (!(m_count == 3 && m_hasCircle)) {
+        MessageBox(L"먼저 점 3개를 찍어 정원을 만든 뒤에 [랜덤 이동]을 눌러주세요.");
+        return;
+    }
+
     if (m_randRunning) return;
     m_randRunning = true;
     m_pRandTh = AfxBeginThread(&CDrawCircleDlg::RandThreadProc, this,
