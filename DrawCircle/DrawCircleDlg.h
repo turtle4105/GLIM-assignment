@@ -51,7 +51,6 @@ protected:
     CWinThread* m_pRandTh = nullptr;
     bool        m_randRunning = false;
 
-    // ====== 유틸 함수 ======
     void ClearImage(BYTE gray = 255);
     void PullUserInputs();
     void RedrawAll();

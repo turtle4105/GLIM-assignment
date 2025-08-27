@@ -109,8 +109,6 @@ BOOL CDrawCircleDlg::OnInitDialog()
 	SetIcon(m_hIcon, TRUE);			// 큰 아이콘을 설정합니다.
 	SetIcon(m_hIcon, FALSE);		// 작은 아이콘을 설정합니다.
 
-	// TODO: 여기에 추가 초기화 작업을 추가합니다.
-
 	// UI 기본값
 	SetDlgItemInt(IDC_EDIT_RADIUS, 10, FALSE);
 	SetDlgItemInt(IDC_EDIT_THICKNESS, 4, FALSE);
@@ -248,7 +246,7 @@ void CDrawCircleDlg::OnLButtonUp(UINT nFlags, CPoint pt)
     CDialogEx::OnLButtonUp(nFlags,pt);
 }
 
-// 페인트: CImage 화면에 출력
+// CImage 화면에 출력
 void CDrawCircleDlg::OnPaint()
 {
     if (IsIconic()) { CDialogEx::OnPaint(); return; }
