@@ -111,10 +111,9 @@ BOOL CDrawCircleDlg::OnInitDialog()
 
 	// TODO: 여기에 추가 초기화 작업을 추가합니다.
 
-		// UI 기본값
+	// UI 기본값
 	SetDlgItemInt(IDC_EDIT_RADIUS, 10, FALSE);
 	SetDlgItemInt(IDC_EDIT_THICKNESS, 4, FALSE);
-	//SetDlgItemText(IDC_STATIC_CENTER, L"-");
 
 	// CImage 생성
 	const int w = 800, h = 560, bpp = 8;
@@ -210,12 +209,6 @@ void CDrawCircleDlg::RedrawAll()
     if (m_count>0){ s.Format(L"%d %d",m_pts[0].x,m_pts[0].y); SetDlgItemText(IDC_EDIT_C1,s); }
     if (m_count>1){ s.Format(L"%d %d",m_pts[1].x,m_pts[1].y); SetDlgItemText(IDC_EDIT_C2,s); }
     if (m_count>2){ s.Format(L"%d %d",m_pts[2].x,m_pts[2].y); SetDlgItemText(IDC_EDIT_C3,s); }
-    //if (m_hasCircle){
-    //    s.Format(L"(%d, %d)  r=%d",
-    //             (int)std::lround(m_cx),(int)std::lround(m_cy),(int)std::lround(m_cr));
-    //    SetDlgItemText(IDC_STATIC_CENTER,s);
-    //} else SetDlgItemText(IDC_STATIC_CENTER,L"-");
-
     Invalidate(FALSE);
 }
 
@@ -271,7 +264,6 @@ void CDrawCircleDlg::OnBnClickedBtnInit()
     SetDlgItemText(IDC_EDIT_C1,nullptr);
     SetDlgItemText(IDC_EDIT_C2,nullptr);
     SetDlgItemText(IDC_EDIT_C3,nullptr);
-    //SetDlgItemText(IDC_STATIC_CENTER,L"-");
     ClearImage(255);
     Invalidate(FALSE);
 }

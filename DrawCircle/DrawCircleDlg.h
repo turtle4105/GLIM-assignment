@@ -1,7 +1,5 @@
 ﻿
 // DrawCircleDlg.h: 헤더 파일
-//
-
 #pragma once
 
 #include "CircleDrawer.h"
@@ -20,11 +18,6 @@ public:
 	enum { IDD = IDD_DRAWCIRCLE_DIALOG };
 #endif
 
-	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV 지원입니다.
-
-
-// 구현입니다.
 protected:
 	HICON m_hIcon;
 
@@ -33,6 +26,7 @@ protected:
 	afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
+    virtual void DoDataExchange(CDataExchange* pDX);
 
 
     // ====== 그림 버퍼/상태 ======
